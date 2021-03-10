@@ -1,3 +1,4 @@
+MUSL_BASE_PATH ?= musl
 ifdef MUSL_PATH
     MUSL_BIN_FOLDER = $(MUSL_PATH)/bin/
     MUSL_INCLUDE_FOLDER = $(MUSL_PATH)/x86_64-w64-mingw32/include/
@@ -23,7 +24,7 @@ DLIBNAME = $(LIBNAME).so
 SLIBNAME = $(LIBNAME).a
 
 CFLAGS = -Wall -std=c99 -static -O2
-LFLAGS = 
+LDFLAGS = 
 
 -include config.mak
 
@@ -45,7 +46,7 @@ CROSS_AR = $(PREFIX)$(AR)
 SOBJ = $(SRC:%.c=$(OBJ_FOLDER)/%.s.o)
 DOBJ = $(SRC:%.c=$(OBJ_FOLDER)/%.d.o)
 
-LFLAGS += -L$(LIB_FOLDER) -l$(OUT)
+LDFLAGS += -L$(LIB_FOLDER) -l$(OUT)
 FOLDERS = $(BIN_FOLDER) $(LIB_FOLDER) $(OBJ_FOLDER)
 
 .PHONY: all
@@ -62,7 +63,7 @@ setup: $(FOLDERS)
 	@echo "********************************************************"
 	@echo "** COMPILING $@" 
 	@echo "********************************************************\n"
-	$(CROSS_CC) main.c -o $@ $(CFLAGS) $(INCLUDE) $(LFLAGS) 
+	$(CROSS_CC) main.c -o $@ $(CFLAGS) $(INCLUDE) $(LDFLAGS) 
 	@echo "\n"
 
 %.a: $(SOBJ)
@@ -84,14 +85,14 @@ $(OBJ_FOLDER)/%.s.o: %.c
 	@echo "** $(SLIBNAME): COMPILING SOURCE $<\r"
 	@echo "********************************************************"
 	@mkdir -p '$(@D)'
-	$(CROSS_CC) -c $< -o $@ $(CFLAGS) $(INCLUDE) $(LFLAGS)
+	$(CROSS_CC) -c $< -o $@ $(CFLAGS) $(INCLUDE) $(LDFLAGS)
 
 $(OBJ_FOLDER)/%.d.o: %.c
 	@echo "********************************************************"
 	@echo "** $(DLIBNAME): COMPILING SOURCE $<\r"
 	@echo "********************************************************"
 	@mkdir -p '$(@D)'
-	$(CROSS_CC) -c $< -o $@ -fPIC $(CFLAGS) $(INCLUDE) $(LFLAGS)
+	$(CROSS_CC) -c $< -o $@ -fPIC $(CFLAGS) $(INCLUDE) $(LDFLAGS)
 
 clean:
 	rm -rf $(OUT)

@@ -1,2 +1,6 @@
-# c-start
-a simple base project to to start with *WIP*
+# cstar
+C Start
+
+a simple C base project to start with
+
+** WIP **

@@ -1,0 +1,6 @@
+cstar
+musl/*
+bin/
+lib/
+obj/
+config.mak
