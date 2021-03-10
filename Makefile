@@ -1,13 +1,21 @@
 MUSL_BASE_PATH ?= musl
+MUSL_TOOLCHAIN = 
+MUSL_CROSS = cross
+
+ifneq ($(MUSL_TOOLCHAIN),)
+    PREFIX = $(MUSL_TOOLCHAIN)-
+    MUSL_PATH = $(MUSL_BASE_PATH)/$(PREFIX)$(MUSL_CROSS)
+endif
+
 ifdef MUSL_PATH
     MUSL_BIN_FOLDER = $(MUSL_PATH)/bin/
-    MUSL_INCLUDE_FOLDER = $(MUSL_PATH)/x86_64-w64-mingw32/include/
+    MUSL_INCLUDE_FOLDER = $(MUSL_PATH)/$(MUSL_TOOLCHAIN)/include/
 endif
 
 MUSL_BIN_FOLDER ?= 
 MUSL_TOOLCHAIN ?= 
 
-PREFIX := 
+PREFIX ?= 
 CC := gcc
 AR := ar
 
@@ -16,7 +24,7 @@ LIB_FOLDER = lib
 OBJ_FOLDER = obj
 
 SRC = $(wildcard src/*c) teste.c
-OUT = cross
+OUT = cstar
 INCLUDE = -Iinclude -Isrc
 
 LIBNAME = lib$(OUT)
@@ -27,6 +35,10 @@ CFLAGS = -Wall -std=c99 -static -O2
 LDFLAGS = 
 
 -include config.mak
+
+LIBNAME ?= lib$(OUT)
+DLIBNAME ?= $(LIBNAME).so
+SLIBNAME ?= $(LIBNAME).a
 
 ifdef MUSL_INCLUDE_FOLDER
     INCLUDE += -I$(MUSL_INCLUDE_FOLDER)
@@ -53,6 +65,7 @@ FOLDERS = $(BIN_FOLDER) $(LIB_FOLDER) $(OBJ_FOLDER)
 .SECONDARY: $(SOBJ) $(DOBJ)
 
 all: setup $(LIB_FOLDER)/$(SLIBNAME) $(LIB_FOLDER)/$(DLIBNAME) $(BIN_FOLDER)/$(OUT).bin
+	@echo $(MUSL_PATH)
 
 $(FOLDERS):
 	@mkdir -p $@

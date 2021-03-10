@@ -1,12 +1,12 @@
 #!/bin/bash
 
-PREFIX=x86_64-linux-musl-
-CROSS=cross
+MUSL_TOOLCHAIN=x86_64-linux-musl
+MUSL_CROSS=cross
 
 if [[ $1 == "windows" ]]; then
-    PREFIX=x86_64-w64-mingw32-
+    MUSL_TOOLCHAIN=x86_64-w64-mingw32
 fi
 
-MUSL_PATH=musl/${PREFIX}${CROSS}
+echo "${MUSL_TOOLCHAIN}-${MUSL_CROSS}"
 
-make MUSL_PATH=${MUSL_PATH} PREFIX=${PREFIX}
+make MUSL_TOOLCHAIN=${MUSL_TOOLCHAIN} 
