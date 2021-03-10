@@ -28,9 +28,9 @@ LFLAGS =
 -include config.mak
 
 ifdef MUSL_INCLUDE_FOLDER
-    #INCLUDE += -I$(MUSL_INCLUDE_FOLDER)
+    INCLUDE += -I$(MUSL_INCLUDE_FOLDER)
     #C_INCLUDE_PATH = $(MUSL_INCLUDE_FOLDER)
-    export CPATH :=  
+    #export CPATH :=  
 endif
 
 ifeq ($(OS),Windows_NT)
