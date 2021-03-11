@@ -32,7 +32,7 @@ eg:
 - `make MUSL_TARGET=mips-linux-musl`
 - `make MUSL_BASE_DIR=compilers/ MUSL_TARGET=mips-linux-musl`
 
-you can check othe config variables bellow:
+other variables:
 
 - `MUSL_BASE_DIR`, the directory that contains musl compilers. eg: `musl/`
 - `MUSL_PATH`, the compiler's path. eg: `x86_64-w64-mingw-cross`, `x86_64-linux-musl-native`
