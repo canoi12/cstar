@@ -21,8 +21,9 @@ and the Makefile create these folders:
 
 ### setup musl
 
-create a `musl/` folder, download the compilers at [https://musl.cc] and extract
+create a `musl/` (or anything else) folder, download the compilers at [https://musl.cc] and extract
 
+set a `MUSL_BASE_DIR` to `musl/`
 set a `MUSL_TARGET` to the musl target arch: `x86_64-w64-mingw32`, `x86_64-linux-musl`
 
 and `MUSL_CROSS` to `cross` or `native`. by default is `cross`

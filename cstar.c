@@ -8,9 +8,11 @@ int main(int argc, char ** argv) {
     printf("2. compile code\n");
     printf("3. setup\n");
     printf("e. exit\n");
-    printf("option: ");
+    printf("? ");
     int o;
     scanf("%d", &o);
+    
+    printf("you choose %d\n", o);
 
     return 0;
 }
