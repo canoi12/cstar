@@ -16,7 +16,7 @@ BIN_DIR = bin/
 LIB_DIR = lib/
 OBJ_DIR = obj/
 
-SRC = $(wildcard $(SRC_DIR)*c)
+SRC = $(wildcard $(SRC_DIR)/*.c)
 OUT = cstar
 INCLUDE = -I$(INC_DIR) -I$(SRC_DIR)
 
@@ -27,12 +27,12 @@ LDFLAGS =
 
 ifneq ($(MUSL_TARGET),)
     PREFIX = $(if $(MUSL_TARGET),$(MUSL_TARGET)-,)
-    MUSL_PATH = $(MUSL_BASE_DIR)$(PREFIX)$(MUSL_CROSS)/
+    MUSL_PATH = $(MUSL_BASE_DIR)/$(PREFIX)$(MUSL_CROSS)
 endif
 
 ifneq ($(MUSL_PATH),)
-    MUSL_BIN_DIR = $(MUSL_PATH)bin/
-    MUSL_INCLUDE_FOLDER = $(MUSL_PATH)$(MUSL_TARGET)/include/
+    MUSL_BIN_DIR = $(MUSL_PATH)/bin/
+    MUSL_INCLUDE_FOLDER = $(MUSL_PATH)/$(MUSL_TARGET)/include/
 endif
 
 LIBNAME ?= lib$(OUT)
@@ -52,16 +52,17 @@ endif
 CROSS_CC = $(PREFIX)$(CC)
 CROSS_AR = $(PREFIX)$(AR)
 
-SOBJ = $(SRC:%.c=$(OBJ_DIR)%.s.o)
-DOBJ = $(SRC:%.c=$(OBJ_DIR)%.d.o)
+SOBJ = $(SRC:%.c=$(OBJ_DIR)/%.s.o)
+DOBJ = $(SRC:%.c=$(OBJ_DIR)/%.d.o)
 
 LDFLAGS += -L$(LIB_DIR) -l$(OUT)
 FOLDERS = $(BIN_DIR) $(LIB_DIR) $(OBJ_DIR)
 
+
 .PHONY: all
 .SECONDARY: $(SOBJ) $(DOBJ)
 
-all: setup $(LIB_DIR)$(SLIBNAME) $(LIB_DIR)$(DLIBNAME) $(BIN_DIR)$(OUT).bin
+all: setup $(LIB_DIR)/$(SLIBNAME) $(LIB_DIR)/$(DLIBNAME) $(BIN_DIR)/$(OUT).bin
 	@echo $(MUSL_PATH)
 
 $(FOLDERS):
@@ -93,14 +94,14 @@ cstar: cstar.c
 	$(CROSS_CC) -shared -o $@ $(DOBJ)
 	@echo "\n"
 
-$(OBJ_DIR)%.s.o: %.c
+$(OBJ_DIR)/%.s.o: %.c
 	@echo "********************************************************"
 	@echo "** $(SLIBNAME): COMPILING SOURCE $<\r"
 	@echo "********************************************************"
 	@mkdir -p '$(@D)'
 	$(CROSS_CC) -c $< -o $@ $(CFLAGS) $(INCLUDE) $(LDFLAGS)
 
-$(OBJ_DIR)%.d.o: %.c
+$(OBJ_DIR)/%.d.o: %.c
 	@echo "********************************************************"
 	@echo "** $(DLIBNAME): COMPILING SOURCE $<\r"
 	@echo "********************************************************"
