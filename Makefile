@@ -71,7 +71,7 @@ $(FOLDERS):
 setup: $(FOLDERS)
 
 cstar: cstar.c
-	gcc $< -o cstar
+	gcc $< -o cstar $(CFLAGS)
 
 %.bin:
 	@echo "********************************************************"
