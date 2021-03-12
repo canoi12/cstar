@@ -86,34 +86,34 @@ cstar: cstar.h
 %.bin:
 	@echo "********************************************************"
 	@echo "** COMPILING $@" 
-	@echo "********************************************************\n"
+	@echo "********************************************************"
 	$(CROSS_CC) main.c -o $@ $(CFLAGS) $(INCLUDE) $(LDFLAGS) 
-	@echo "\n"
+	@echo ""
 
 %.a: $(SOBJ)
 	@echo "********************************************************"
 	@echo "** CREATING $@"
 	@echo "********************************************************"
 	$(CROSS_AR) rcs $@ $(SOBJ)
-	@echo "\n"
+	@echo ""
 
 %.so: $(DOBJ)
 	@echo "********************************************************"
-	@echo "** CREATING $@\r"
+	@echo "** CREATING $@"
 	@echo "********************************************************"
 	$(CROSS_CC) -shared -o $@ $(DOBJ)
-	@echo "\n"
+	@echo ""
 
 $(O_DIR)/%.s.o: %.c
 	@echo "********************************************************"
-	@echo "** $(SLIBNAME): COMPILING SOURCE $<\r"
+	@echo "** $(SLIBNAME): COMPILING SOURCE $<"
 	@echo "********************************************************"
 	@mkdir -p '$(@D)'
 	$(CROSS_CC) -c $< -o $@ $(CFLAGS) $(INCLUDE) $(LDFLAGS)
 
 $(O_DIR)/%.d.o: %.c
 	@echo "********************************************************"
-	@echo "** $(DLIBNAME): COMPILING SOURCE $<\r"
+	@echo "** $(DLIBNAME): COMPILING SOURCE $<"
 	@echo "********************************************************"
 	@mkdir -p '$(@D)'
 	$(CROSS_CC) -c $< -o $@ -fPIC $(CFLAGS) $(INCLUDE) $(LDFLAGS)
