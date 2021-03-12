@@ -54,14 +54,13 @@ endif
 CROSS_CC = $(PREFIX)$(CC)
 CROSS_AR = $(PREFIX)$(AR)
 
-S_DIR = $(realpath $(SRC_DIR))
 ifeq ($(SRC),)
-    SRC := $(wildcard $(S_DIR)/*.c)  
+    SRC := $(wildcard $(SRC_DIR)/*.c)  
 endif
 
-O_DIR = $(realpath $(OBJ_DIR))
-L_DIR = $(realpath $(LIB_DIR))
-B_DIR = $(realpath $(BIN_DIR))
+O_DIR = $(dir $(OBJ_DIR))
+L_DIR = $(dir $(LIB_DIR))
+B_DIR = $(dir $(BIN_DIR))
 
 OBJ = $(SRC:%.c=$(O_DIR)/%.o)
 
@@ -82,8 +81,8 @@ $(FOLDERS):
 
 setup: $(FOLDERS)
 
-cstar: cstar.c
-	gcc $< -o cstar
+cstar: cstar.h
+	gcc $< -o cstar -DCSTAR_IMPLEMENTATION -DCSTAR_CLI
 
 %.bin:
 	@echo "********************************************************"
