@@ -16,14 +16,15 @@ BIN_DIR = bin/
 LIB_DIR = lib/
 OBJ_DIR = obj/
 
-SRC = $(wildcard $(SRC_DIR)/*.c)
-OUT = cstar
-INCLUDE = -I$(INC_DIR) -I$(SRC_DIR)
+SRC =
+OUT ?= cstar
 
 CFLAGS = -Wall -std=c99 -static -O2
 LDFLAGS = 
 
 -include config.mak
+
+INCLUDE += -I$(INC_DIR) -I$(SRC_DIR)
 
 ifneq ($(MUSL_TARGET),)
     PREFIX = $(if $(MUSL_TARGET),$(MUSL_TARGET)-,)
@@ -52,8 +53,18 @@ endif
 CROSS_CC = $(PREFIX)$(CC)
 CROSS_AR = $(PREFIX)$(AR)
 
-SOBJ = $(SRC:%.c=$(OBJ_DIR)/%.s.o)
-DOBJ = $(SRC:%.c=$(OBJ_DIR)/%.d.o)
+ifeq ($(SRC),)
+    SRC := $(wildcard $(SRC_DIR)/*.c)  
+endif
+
+O_DIR = $(dir $(OBJ_DIR))
+L_DIR = $(dir $(LIB_DIR))
+B_DIR = $(dir $(BIN_DIR))
+
+OBJ = $(SRC:%.c=$(O_DIR)/%.o)
+
+SOBJ = $(OBJ:%.o=%.s.o)
+DOBJ = $(OBJ:%.o=%.d.o)
 
 LDFLAGS += -L$(LIB_DIR) -l$(OUT)
 FOLDERS = $(BIN_DIR) $(LIB_DIR) $(OBJ_DIR)
@@ -62,16 +73,15 @@ FOLDERS = $(BIN_DIR) $(LIB_DIR) $(OBJ_DIR)
 .PHONY: all
 .SECONDARY: $(SOBJ) $(DOBJ)
 
-all: setup $(LIB_DIR)/$(SLIBNAME) $(LIB_DIR)/$(DLIBNAME) $(BIN_DIR)/$(OUT).bin
-	@echo $(MUSL_PATH)
+all: setup $(L_DIR)/$(SLIBNAME) $(L_DIR)/$(DLIBNAME) $(B_DIR)/$(OUT).bin
 
 $(FOLDERS):
 	@mkdir -p $@
 
 setup: $(FOLDERS)
 
-cstar: cstar.c
-	gcc $< -o cstar $(CFLAGS)
+cstar: cstar.h
+	gcc $< -o cstar -DCSTAR_IMPLEMENTATION -DCSTAR_CLI
 
 %.bin:
 	@echo "********************************************************"
@@ -94,14 +104,14 @@ cstar: cstar.c
 	$(CROSS_CC) -shared -o $@ $(DOBJ)
 	@echo "\n"
 
-$(OBJ_DIR)/%.s.o: %.c
+$(O_DIR)/%.s.o: %.c
 	@echo "********************************************************"
 	@echo "** $(SLIBNAME): COMPILING SOURCE $<\r"
 	@echo "********************************************************"
 	@mkdir -p '$(@D)'
 	$(CROSS_CC) -c $< -o $@ $(CFLAGS) $(INCLUDE) $(LDFLAGS)
 
-$(OBJ_DIR)/%.d.o: %.c
+$(O_DIR)/%.d.o: %.c
 	@echo "********************************************************"
 	@echo "** $(DLIBNAME): COMPILING SOURCE $<\r"
 	@echo "********************************************************"
