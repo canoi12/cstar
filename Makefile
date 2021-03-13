@@ -19,10 +19,16 @@ OBJ_DIR = obj/
 SRC =
 OUT ?= cstar
 
-CFLAGS = -Wall -std=c99 -static -O2
+CVERSION = c99
+
+CFLAGS = 
 LDFLAGS = 
 
 -include config.mak
+
+ifeq ($(CFLAGS),)
+    CFLAGS = -Wall -std=$(CVERSION) -static -O2
+endif
 
 INCLUDE += -I$(INC_DIR) -I$(SRC_DIR)
 
@@ -80,8 +86,8 @@ $(FOLDERS):
 
 setup: $(FOLDERS)
 
-cstar: cstar.h
-	gcc $< -o cstar -DCSTAR_IMPLEMENTATION -DCSTAR_CLI
+cstar: cstar.c
+	gcc $< -o cstar
 
 %.bin:
 	@echo "********************************************************"
