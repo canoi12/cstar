@@ -4,11 +4,14 @@
 
 int main(int argc, char ** argv) {
     cst_log(0, "testandow, 123");
-    cst_tracelog(CST_ERROR, "viji, vacilou");
-    cst_tracelog(CST_WARNING, "carain");
+    cst_trace("viji, vacilou");
+    cst_trace("carain");
 
-    int i = 0;
+    int i = 1;
+    cst_log("vai dar ruim? %d != 0", i);
     cst_assert(i != 0);
+
+    cst_fatal("err, deu ruim");
 
     printf("C Start Project\n");
     return 0;
