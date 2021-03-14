@@ -34,6 +34,7 @@ INCLUDE =
 
 SRC += $(wildcard $(SRC_DIR)/*.c)
 INCLUDE += -I$(INC_DIR) -I$(SRC_DIR)
+INCLUDE += $(MODULES:%=-I$(MODDIR)/%/src) $(MODULES:%=-I$(MODDIR)/%/include)
 
 OBJ = $(SRC:%.c=$(OBJ_DIR)/%.o)
 SOBJ = $(OBJ:%.o=%.s.o)
@@ -69,7 +70,7 @@ SLIBOUT = $(SLIBNAME:%=$(LIB_DIR)/$(SLIBNAME))
 DLIBOUT = $(DLIBNAME:%=$(LIB_DIR)/$(DLIBNAME))
 OUT = $(NAME:%=$(BIN_DIR)/%)
 
-build: folders $(OUT)
+build: folders $(MODULES) $(OUT)
 
 folders: $(FOLDERS)
 
